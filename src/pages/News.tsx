@@ -2,7 +2,7 @@ import { GetNewsdata } from '../api/Newsapi';
 import { Navbar } from '../components/Navbar';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { type NewsArticle } from '../types/news';
-import { CircularProgress, Box, Typography, Container, Grid, Card, CardMedia, CardContent, CardActions, Button } from '@mui/material';
+import { CircularProgress, Box, Typography, Container } from '@mui/material';
 
 function News() {
     const [newsData, setNewsData] = useState<NewsArticle[]>([]);
