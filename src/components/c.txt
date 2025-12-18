@@ -1,0 +1,117 @@
+import { GetNewsdata } from '../api/Newsapi';
+import { Navbar } from '../components/Navbar';
+import { useEffect, useState, useRef, useCallback } from 'react';
+import { type NewsArticle } from '../types/news';
+
+function News() {
+    const [newsData, setNewsData] = useState<NewsArticle[]>([]);
+    const [nextPage, setNextPage] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const loaderRef = useRef<HTMLDivElement | null>(null);
+
+    // ✅ Safe Fetch Function
+    const fetchNews = useCallback(async (page?: string) => {
+        if (loading) return;
+
+        setLoading(true);
+        setError(null);
+
+        try {
+            const data = await GetNewsdata(page);
+
+            // 🛡 Defensive check
+            if (!data || !Array.isArray(data.results)) {
+                throw new Error('Invalid API response');
+            }
+
+            setNewsData(prev => [...prev, ...data.results]);
+            setNextPage(data.nextPage ?? null);
+
+        } catch (err) {
+            console.error('Failed to fetch news:', err);
+            setError('Failed to load news. Please try again.');
+        } finally {
+            setLoading(false);
+        }
+    }, [loading]);
+
+    // ✅ Initial Load
+    useEffect(() => {
+        fetchNews();
+    }, [fetchNews]);
+
+    // ✅ IntersectionObserver (Optimized)
+    useEffect(() => {
+        const loader = loaderRef.current;
+        if (!loader) return;
+
+        const observer = new IntersectionObserver(
+            entries => {
+                const firstEntry = entries[0];
+                if (firstEntry.isIntersecting && nextPage && !loading) {
+                    fetchNews(nextPage);
+                }
+            },
+            {
+                root: null,
+                rootMargin: '100px',
+                threshold: 0,
+            }
+        );
+
+        observer.observe(loader);
+
+        return () => observer.disconnect();
+    }, [nextPage, loading, fetchNews]);
+
+    return (
+        <div>
+            <Navbar />
+
+            <div className="news-container">
+                {newsData.map(article => (
+                    <div key={article.article_id} className="news-card">
+                        <img
+                            src={article.image_url ?? '/placeholder.jpg'}
+                            alt={article.title}
+                            className="news-image"
+                        />
+                        <h3>{article.title}</h3>
+                        <p>{article.description}</p>
+                        <a href={article.link} target="_blank" rel="noopener noreferrer">
+                            Read more
+                        </a>
+                    </div>
+                ))}
+            </div>
+
+            {/* ❌ Error UI */}
+            {error && (
+                <div style={{ textAlign: 'center', padding: '20px', color: 'red' }}>
+                    {error}
+                </div>
+            )}
+
+            {/* ⏳ Loader */}
+            {nextPage && !error && (
+                <div
+                    ref={loaderRef}
+                    style={{ textAlign: 'center', padding: '20px' }}
+                >
+                    {loading ? 'Loading more news...' : 'Scroll to load more'}
+                </div>
+            )}
+
+            {/* 🚫 End State */}
+            {!nextPage && newsData.length > 0 && (
+                <div style={{ textAlign: 'center', padding: '20px' }}>
+                    No more news
+                </div>
+            )}
+        </div>
+    );
+}
+
+export default News;
