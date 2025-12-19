@@ -8,11 +8,12 @@ import {
     Typography,
     Box,
     IconButton,
-    InputAdornment
+    InputAdornment,
+    Link
 } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { Link } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom'
 
 function Login() {
     const [formData, setFormData] = useState({
@@ -130,7 +131,7 @@ function Login() {
                         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                             <Typography variant="body2" color="text.secondary">
                                 Don't have an account?{' '}
-                                <Link to="/" sx={{ fontWeight: '600', color: '#4f46e5', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}>
+                                <Link component={RouterLink} to="/signup" sx={{ fontWeight: '600', color: '#4f46e5', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}>
                                     Sign Up
                                 </Link>
                             </Typography>
