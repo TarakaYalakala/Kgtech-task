@@ -21,7 +21,8 @@ function News() {
         setLoading(true);
         setError(null);
 
-        // Artificial delay for UI feedback
+        // Artificial delay for UI feedback for 200ms to see that loading mui progress //
+
         await new Promise(resolve => setTimeout(resolve, 200));
 
         try {
@@ -44,12 +45,12 @@ function News() {
         }
     }, [newsData.length]);
 
-    // ✅ Initial Load
+    // Initial Load api data
     useEffect(() => {
         fetchNews();
     }, []);
 
-    // ✅ IntersectionObserver (Optimized Infinite Scroll)
+    // IntersectionObserver (Optimized Infinite Scroll) ------>
     useEffect(() => {
         const currentLoader = loaderRef.current;
         if (!currentLoader || !nextPage) return;
@@ -142,7 +143,7 @@ function News() {
                     ))}
                 </div>
 
-                {/* ⏳ Loader */}
+                {/* Loader */}
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 8 }}>
                     {loading ? (
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
@@ -156,10 +157,10 @@ function News() {
                     )}
                 </Box>
 
-                {/* 🚫 End State */}
+                {/* End State */}
                 {!nextPage && newsData.length > 0 && (
                     <Typography align="center" sx={{ color: '#9ca3af', fontWeight: 600, py: 4 }}>
-                        ✨ You've reached the end of the news feed
+                        You've reached the end of the news feed
                     </Typography>
                 )}
             </Container>

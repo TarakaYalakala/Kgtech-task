@@ -2,6 +2,10 @@
 
 **Live Demo:** [https://kgtech-task.vercel.app/](https://kgtech-task.vercel.app/)
 
+OR 
+
+Start using: npm run dev for ---> localhost:3000 ////
+
 A modern React application featuring a responsive news feed with infinite scroll, user authentication (Login/Signup) with glassmorphism design, and a fully responsive navigation system.
 
 ## 🚀 Technologies Used

@@ -7,15 +7,25 @@ import {
     Paper,
     Typography,
     Box,
-    Link
+    IconButton,
+    InputAdornment
 } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { Link } from 'react-router-dom'
 
 function Login() {
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
+    const [showPassword, setShowPassword] = useState(false);
+
+    const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -72,13 +82,27 @@ function Login() {
                             fullWidth
                             name="password"
                             label="Password"
-                            type="password"
+                            type={showPassword ? 'text' : 'password'}
                             id="password"
                             autoComplete="current-password"
                             value={formData.password}
                             onChange={handleChange}
                             variant="outlined"
                             sx={{ mb: 3 }}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleClickShowPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            edge="end"
+                                        >
+                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
                         />
                         <Button
                             type="submit"
@@ -106,7 +130,7 @@ function Login() {
                         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                             <Typography variant="body2" color="text.secondary">
                                 Don't have an account?{' '}
-                                <Link component={RouterLink} to="/signup" variant="body2" sx={{ fontWeight: '600', color: '#4f46e5', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}>
+                                <Link to="/" sx={{ fontWeight: '600', color: '#4f46e5', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}>
                                     Sign Up
                                 </Link>
                             </Typography>

@@ -1,5 +1,5 @@
 import { Suspense } from "react"
-import { LoginPage, SignupPage } from "../routes/Lazy"
+import { LoginPage } from "../routes/Lazy"
 
 export const AuthRoutes = [
     {
@@ -7,14 +7,6 @@ export const AuthRoutes = [
         element: (
             <Suspense fallback={<div>Loading...</div>}>
                 <LoginPage />
-            </Suspense>
-        )
-    },
-    {
-        path: '/signup',
-        element: (
-            <Suspense fallback={<div>Loading...</div>}>
-                <SignupPage />
             </Suspense>
         )
     }
